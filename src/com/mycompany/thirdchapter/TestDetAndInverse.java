@@ -9,7 +9,9 @@ import org.junit.Test;
  * @version 1.0
  */
 public class TestDetAndInverse {
-    public static void main(String[] args) {
+    // 测试求行列式
+    @Test
+    public void testDet() {
         for (int k = 0; k < 10; k++) {
             int row = (int)(Math.random() * 10) + 1;
             int col = row;
@@ -27,6 +29,7 @@ public class TestDetAndInverse {
         }
     }
 
+    // 测试求逆矩阵
     @Test
     public void testInverse(){
         for (int k = 0; k < 10; k++) {
@@ -45,5 +48,17 @@ public class TestDetAndInverse {
             System.out.println("逆矩阵：");
             MatrixUtils.show(inverse);
         }
+    }
+
+    // 测试矩阵转置
+    @Test
+    public void testTrans(){
+        double[][] m = new double[][]{
+                {1,2},
+                {2,5},
+                {5,7}
+        };
+        double[][] transpose = MatrixUtils.transpose(m);
+        MatrixUtils.show(transpose);
     }
 }

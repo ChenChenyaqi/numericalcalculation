@@ -12,18 +12,21 @@ public class MatrixUtils {
     // 如果交换了行列式的某两行或某两列，则变号
     private static boolean symbol = true;
 
-    public static void main(String[] args) {
-        double[][] matrix = new double[][]{
-                {84, 40},
-                {17, 17},
-        };
-        double res = det(matrix);
-        System.out.println("res = " + res);
-    }
-
+    /**
+     * 按照MATLAB中矩阵的格式输出matrix
+     *
+     * @param matrix 矩阵matrix
+     */
     public static void show(double[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0){
+            System.out.println("矩阵不合法，无法输出！");
+            return;
+        }
         System.out.println("============");
         System.out.print("[");
+        // matrix的行
+        int n = matrix.length;
+        int j = 0;
         for (double[] temp : matrix) {
             for (int i = 0; i < temp.length; i++) {
                 if (i == temp.length - 1) {
@@ -32,9 +35,13 @@ public class MatrixUtils {
                 }
                 System.out.print(temp[i] + ", ");
             }
+            if (j == n - 1) {
+                System.out.println("]");
+                break;
+            }
             System.out.println();
+            j++;
         }
-        System.out.print("]");
         System.out.println("============");
     }
 
@@ -59,19 +66,20 @@ public class MatrixUtils {
         if (row != col) {
             return Double.NaN;
         }
-        // matrix复制品，防止行列变换时 污染 原矩阵
+        // matrix复制品，防止行列变换时 污染 原矩阵, 导致求逆矩阵时出现bug
         double[][] copyMatrix = new double[row][row];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < row; j++) {
                 copyMatrix[i][j] = matrix[i][j];
             }
         }
-        // 处理行列式一定为0的情况
-        if (handlingSpecialCases(copyMatrix, row, col) == 0) {
+        // 处理行列式一定为0的情况(某行或某列全为0)
+        if (handlingSpecialCases(copyMatrix, row) == 0) {
             return 0;
         }
         // 用第 i 行, 消 i + 1 ~ row - 1 行
         for (int i = 0; i < row - 1; i++) {
+            // 全主元消元法的体现之处：
             // 把copyMatrix[i][i]元素通过行交换、列交换换成最大的那个，以防止大数吃小数
             change(copyMatrix, i);
             for (int j = i + 1; j < row; j++) {
@@ -79,7 +87,7 @@ public class MatrixUtils {
                 eliminate(copyMatrix, i, j);
             }
         }
-
+        // 行列式结果
         double res = 1;
         for (int i = 0; i < row; i++) {
             // 如果上三角矩阵对角元中，有一个为0，则行列式值为0
@@ -100,15 +108,14 @@ public class MatrixUtils {
      * 处理行列式一定为 0 的情况
      *
      * @param matrix 矩阵matrix
-     * @param row    行
-     * @param col    列
+     * @param n      matrix的阶
      * @return 一定为0，返回0；否则返回 1
      */
-    private static int handlingSpecialCases(double[][] matrix, int row, int col) {
+    private static int handlingSpecialCases(double[][] matrix, int n) {
         // 检查行列式是否有一行全为0
-        for (int i = 0; i < row; i++) {
+        for (int i = 0; i < n; i++) {
             boolean flag = true;
-            for (int j = 0; j < col; j++) {
+            for (int j = 0; j < n; j++) {
                 // 如果这一行有一个元素不为0，则flag为false;
                 if (matrix[i][j] != 0) {
                     flag = false;
@@ -119,9 +126,9 @@ public class MatrixUtils {
             }
         }
         // 检查行列式是否有一列全为0
-        for (int i = 0; i < col; i++) {
+        for (int i = 0; i < n; i++) {
             boolean flag = true;
-            for (int j = 0; j < row; j++) {
+            for (int j = 0; j < n; j++) {
                 if (matrix[j][i] != 0) {
                     flag = false;
                 }
@@ -227,7 +234,7 @@ public class MatrixUtils {
         // 计算逆矩阵
         for (int i = 0; i < adjointMatrix.length; i++) {
             for (int j = 0; j < adjointMatrix.length; j++) {
-                adjointMatrix[i][j] *= 1 / Math.abs(det);
+                adjointMatrix[i][j] *= 1 / det;
             }
         }
         // 返回逆矩阵
@@ -250,8 +257,7 @@ public class MatrixUtils {
                 // 得到matrix[i][j]的余子式
                 double complement = getComplement(matrix, i, j);
                 // 计算代数余子式
-                int flag = (int)Math.pow(-1, i + j + 2);
-                double algebraicComplement = flag * complement;
+                double algebraicComplement = (int)Math.pow(-1, i + j + 2) * complement;
                 // 赋值进伴随矩阵中
                 adjointMatrix[j][i] = algebraicComplement;
             }
@@ -270,9 +276,12 @@ public class MatrixUtils {
     private static double getComplement(double[][] matrix, int i, int j) {
         // 余子式的阶
         int n = matrix.length - 1;
+        // 余子式
         double[][] complement = new double[n][n];
+        // matrix的行指针
         int preI = 0;
         for (int k = 0; k < n; k++) {
+            // matrix的列指针
             int preJ = 0;
             for (int l = 0; l < n; l++) {
                 // 当前元素恰好是[i,j]
@@ -293,7 +302,30 @@ public class MatrixUtils {
             }
             preI++;
         }
-        double det = det(complement);
-        return det;
+        return det(complement);
+    }
+
+    /**
+     * 返回矩阵matrix的转置
+     * @param matrix 矩阵matrix
+     * @return matrix的转置
+     */
+    public static double[][] transpose(double[][] matrix){
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0){
+            System.out.println("矩阵不合法");
+            return null;
+        }
+        // 行
+        int row = matrix.length;
+        // 列
+        int col = matrix[0].length;
+        // 转置后的矩阵
+        double[][] tranMatrix = new double[col][row];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                tranMatrix[j][i] = matrix[i][j];
+            }
+        }
+        return tranMatrix;
     }
 }
