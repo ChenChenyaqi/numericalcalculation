@@ -20,7 +20,7 @@
 
 3、牛顿迭代法求单根（用弦截法实现）	
 
-​	NewtonIteration.java
+​	NewtonIteration.java 
 
 <img src="img/image-20211015223147977.png" alt="image-20211015223147977" style="zoom:80%;" />
 
