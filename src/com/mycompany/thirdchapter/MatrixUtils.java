@@ -147,7 +147,7 @@ public class MatrixUtils {
      * @param i      i行
      * @param j      j行
      */
-    private static void eliminate(double[][] matrix, int i, int j) {
+    public static void eliminate(double[][] matrix, int i, int j) {
         // j行每个元素所乘的消元因子
         double temp = -matrix[j][i] / matrix[i][i];
         // j行i列一定可以消成0
@@ -194,18 +194,18 @@ public class MatrixUtils {
     }
 
     /**
-     * 得到从 i 行 i 列 到 row 行 col 列中最大的那个数的下标
+     * 得到从 i 行 i 列 到 末尾 这个子方阵中最大的那个数的下标
      *
      * @param matrix 矩阵matrix
      * @param i      从 i 行 i 列开始
-     * @return [row, col]
+     * @return 下标[i,j]
      */
-    private static int[] getMaxNumIndex(double[][] matrix, int i) {
+    public static int[] getMaxNumIndex(double[][] matrix, int i) {
         double maxNum = Double.MIN_VALUE;
         int[] index = new int[2];
         Arrays.fill(index, i);
         for (int j = i; j < matrix.length; j++) {
-            for (int k = i; k < matrix[0].length; k++) {
+            for (int k = i; k < matrix.length; k++) {
                 if (Math.abs(matrix[j][k]) > maxNum) {
                     maxNum = matrix[j][k];
                     index[0] = j;

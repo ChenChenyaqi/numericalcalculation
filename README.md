@@ -26,4 +26,10 @@
 
 ​	MatrixUtils.java、TestDet.java（测试类）
 
+2、消元法求解线性方程组
+
+​	高斯全主元消元法求解线性方程组
+
+​	EliminationMethod.java、TestEliminationMethod.java（测试消元法类）
+
 未完待续...
