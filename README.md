@@ -18,6 +18,12 @@
 
 ​	NewtonIteration.java
 
+### 第三章：
 
+1、矩阵工具箱 
+
+​    实现了求矩阵的行列式（通过对数器通过测试）
+
+​	MatrixUtils.java、TestDet.java（测试类）
 
 未完待续...
