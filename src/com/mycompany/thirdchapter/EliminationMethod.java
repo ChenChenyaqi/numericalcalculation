@@ -61,9 +61,9 @@ public class EliminationMethod {
         }
         // 求解算法，倒着往回求
         double[] noOrderRoots = new double[n];
-        noOrderRoots[n - 1] =  augmentedMatrix[n-1][n] / augmentedMatrix[n - 1][n - 1];
-        for (int i = n - 2; i >= 0 ; i--) {
-            for (int j = n - 1; j > i ; j--) {
+        noOrderRoots[n - 1] = augmentedMatrix[n - 1][n] / augmentedMatrix[n - 1][n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = n - 1; j > i; j--) {
                 augmentedMatrix[i][n] -= noOrderRoots[j] * augmentedMatrix[i][j];
             }
             noOrderRoots[i] = augmentedMatrix[i][n] / augmentedMatrix[i][i];
@@ -112,6 +112,86 @@ public class EliminationMethod {
             }
         }
     }
+
+    /**
+     * 用高斯-若尔当全主元消元法求线性方程组的唯一解
+     *
+     * @param matrix 线性方程组的系数矩阵
+     * @param b      线性方程组中AX=b的b列向量
+     * @return 唯一解
+     */
+    public static double[] jardanTotalElementEliminate(double[][] matrix, double[] b) {
+        // 拦截非法输入
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0 || matrix.length != matrix[0].length) {
+            System.out.println("输入的系数矩阵不合法");
+            return null;
+        }
+        if (b == null || b.length != matrix.length) {
+            System.out.println("输入的b不合法");
+            return null;
+        }
+        if (MatrixUtils.det(matrix) == 0) {
+            System.out.println("行列式值为0，无法求解");
+            return null;
+        }
+        // 系数矩阵的阶
+        int n = matrix.length;
+        // 增广矩阵
+        double[][] augmentedMatrix = new double[n][n + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n + 1; j++) {
+                if (j == n) {
+                    augmentedMatrix[i][j] = b[i];
+                    continue;
+                }
+                augmentedMatrix[i][j] = matrix[i][j];
+            }
+        }
+        // 开始消元
+        // 寻找系数矩阵中绝对值最大(下称最大元)的那个，然后把它变成 1，用它来消其他行
+        // 注意：在找到某一个最大元素后，下次寻找最大元时，应避开这一列，而在其他列里找
+        // used[i]:是否已经在第i列寻找过最大元
+        boolean[] used = new boolean[n];
+        // 寻找 n 次
+        for (int i = 0; i < n; i++) {
+            // 最大元的下标[i,j]
+            int[] index = MatrixUtils.findMaxNumIndex(augmentedMatrix, used);
+            // 对最大元所在的这一行进行消
+            double maxNum = augmentedMatrix[index[0]][index[1]];
+            for (int j = 0; j < n + 1; j++) {
+                augmentedMatrix[index[0]][j] /= maxNum;
+            }
+            // 最大元变成1
+            augmentedMatrix[index[0]][index[1]] = 1;
+            // 对除 最大元所在行外的 其余行进行消元
+            for (int j = 0; j < n; j++) {
+                // 不要消最大元所在这一行，已经消过了
+                if (j == index[0]){
+                    continue;
+                }
+                // 依次保存最大元所在列的元素
+                double temp = augmentedMatrix[j][index[1]];
+                for (int k = 0; k < n + 1; k++) {
+                    augmentedMatrix[j][k] += augmentedMatrix[index[0]][k] * (-temp);
+                }
+                augmentedMatrix[j][index[1]] = 0;
+            }
+        }
+        // 求根
+        double[] roots = new double[n];
+        for (double[] arr : augmentedMatrix){
+            for (int j = 0; j < n + 1; j++) {
+                if (arr[j] != 0){
+                    // xj的值
+                    roots[j] = arr[n];
+                    break;
+                }
+            }
+        }
+        return roots;
+    }
+
+
 
 
 }

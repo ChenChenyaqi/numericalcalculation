@@ -61,4 +61,20 @@ public class TestDetAndInverse {
         double[][] transpose = MatrixUtils.transpose(m);
         MatrixUtils.show(transpose);
     }
+
+    // 测试利用若尔当全主元消元法求逆矩阵
+    @Test
+    public void testInverseByJardan(){
+        double[][] matrix = new double[][]{
+                {5,21,32},
+                {5,9,10},
+                {9,12,55}
+        };
+        // 正确方法
+        double[][] inverse = MatrixUtils.inverse(matrix);
+        MatrixUtils.show(inverse);
+        MatrixUtils.show(matrix);
+        double[][] inverse2 = MatrixUtils.inverseByJardanEliminate(matrix);
+        MatrixUtils.show(inverse2);
+    }
 }
