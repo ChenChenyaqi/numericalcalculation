@@ -31,7 +31,7 @@ public class TestDetAndInverse {
 
     // 测试求逆矩阵
     @Test
-    public void testInverse(){
+    public void testInverse() {
         for (int k = 0; k < 10; k++) {
             int row = (int)(Math.random() * 10) + 1;
             int col = row;
@@ -52,11 +52,11 @@ public class TestDetAndInverse {
 
     // 测试矩阵转置
     @Test
-    public void testTrans(){
+    public void testTrans() {
         double[][] m = new double[][]{
-                {1,2},
-                {2,5},
-                {5,7}
+                {1, 2},
+                {2, 5},
+                {5, 7}
         };
         double[][] transpose = MatrixUtils.transpose(m);
         MatrixUtils.show(transpose);
@@ -64,17 +64,17 @@ public class TestDetAndInverse {
 
     // 测试利用若尔当全主元消元法求逆矩阵
     @Test
-    public void testInverseByJardan(){
+    public void testInverseByJardan() throws Exception {
         double[][] matrix = new double[][]{
-                {5,21,32},
-                {5,9,10},
-                {9,12,55}
+                {-3, 8, 5},
+                {2, -7, 4},
+                {1, 9, -6}
         };
-        // 正确方法
-        double[][] inverse = MatrixUtils.inverse(matrix);
-        MatrixUtils.show(inverse);
         MatrixUtils.show(matrix);
-        double[][] inverse2 = MatrixUtils.inverseByJardanEliminate(matrix);
-        MatrixUtils.show(inverse2);
+        double[][] inverse = MatrixUtils.inverseByJardanEliminate(matrix);
+        MatrixUtils.show(inverse);
+        double[][] res = MatrixUtils.multiply(matrix, inverse);
+        MatrixUtils.show(res);
+        System.out.println((-0.39574468085106385*3+8*0.05531914893617023+5*0.14893617021276598));
     }
 }

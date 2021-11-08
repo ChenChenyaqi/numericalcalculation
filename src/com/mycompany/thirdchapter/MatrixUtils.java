@@ -437,4 +437,31 @@ public class MatrixUtils {
         used[index[1]] = true;
         return index;
     }
+
+
+    /**
+     * 返回两个矩阵相乘的结果，AB
+     * @param A 矩阵A
+     * @param B 矩阵B
+     * @return AB
+     */
+    public static double[][] multiply(double[][] A, double[][] B) throws Exception {
+        if (A == null || B == null) {
+            return null;
+        }
+        if (A[0].length != B.length){
+            throw new Exception("A,B矩阵无法相乘");
+        }
+        int row = A.length;
+        int col = B[0].length;
+        double[][] res = new double[row][col];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                for (int k = 0; k < A[0].length; k++) {
+                    res[i][j] += A[i][k]*B[k][j];
+                }
+            }
+        }
+        return res;
+    }
 }
