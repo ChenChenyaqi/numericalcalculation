@@ -24,13 +24,14 @@
 
 ​    实现了求矩阵的行列式、求矩阵的逆（两种方法）、矩阵转置（通过对数器测试）
 
-​	MatrixUtils.java、TestDet.java（测试类）
+    MatrixUtils.java、TestDet.java（测试类）
 
 2、消元法求解线性方程组
 
 ​	高斯全主元消元法求解线性方程组、高斯-若尔当全主元求解线性方程组
 
-​	EliminationMethod.java、TestEliminationMethod.java（测试消元法类）
+    EliminationMethod.java TestEliminationMethod.java(测试类)
+
 
 3、追赶法求解线性方程组
     
@@ -45,4 +46,11 @@
  2、松弛法求解线性方程组
     
     RelaxationMethod.java
+    
+### 第六章:
+
+1、拉格朗日插值多项式
+    
+    LagrangeInterpolation.java
+    
 未完待续...
