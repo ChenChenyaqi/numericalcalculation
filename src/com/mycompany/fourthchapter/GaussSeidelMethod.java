@@ -77,7 +77,7 @@ public class GaussSeidelMethod {
         return null;
     }
 
-    private static double getSum1(int i, double[][] A, double[] X) {
+   public static double getSum1(int i, double[][] A, double[] X) {
         double sum = 0;
         for (int j = 0; j <= i - 1; j++) {
             sum += A[i][j] * X[j];
@@ -85,7 +85,7 @@ public class GaussSeidelMethod {
         return sum;
     }
 
-    private static double getSum2(int i, int n, double[][] A, double[] preX) {
+    public static double getSum2(int i, int n, double[][] A, double[] preX) {
         double sum = 0;
         for (int j = i + 1; j < n; j++) {
             sum += A[i][j] * preX[j];
