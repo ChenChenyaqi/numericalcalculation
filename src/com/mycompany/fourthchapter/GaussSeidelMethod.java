@@ -16,7 +16,7 @@ public class GaussSeidelMethod {
                 {4, 11, -1},
                 {6, 3, 12}
         };
-        double[] b = new double[]{20,33,36};
+        double[] b = new double[]{20, 33, 36};
         int n = 2;
         int maxTime = 10000;
         double esp = 0.00001;
@@ -27,7 +27,7 @@ public class GaussSeidelMethod {
         for (int i = 0; i < X.length; i++) {
             double sum = 0;
             for (int j = 0; j < X.length; j++) {
-                sum += A[i][j]*X[j];
+                sum += A[i][j] * X[j];
             }
             res[i] = sum;
         }
@@ -66,7 +66,7 @@ public class GaussSeidelMethod {
                 double sum2 = getSum2(j, len, A, preX);
                 X[j] = (b[j] - sum1 - sum2) / A[j][j];
             }
-            if(Math.abs(getNorm(X, n) - getNorm(preX, n)) < esp){
+            if (Math.abs(getNorm(X, n) - getNorm(preX, n)) < esp) {
                 return X;
             }
             // 复制X到preX
@@ -77,7 +77,7 @@ public class GaussSeidelMethod {
         return null;
     }
 
-   public static double getSum1(int i, double[][] A, double[] X) {
+    public static double getSum1(int i, double[][] A, double[] X) {
         double sum = 0;
         for (int j = 0; j <= i - 1; j++) {
             sum += A[i][j] * X[j];
