@@ -22,6 +22,7 @@ public class LagrangeInterpolation {
         }
     }
 
+
     /**
      * 拉格朗日插值多项式计算给定数据下，f(x0)的值
      *
