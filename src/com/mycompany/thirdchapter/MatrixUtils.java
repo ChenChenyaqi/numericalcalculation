@@ -347,11 +347,13 @@ public class MatrixUtils {
             System.out.println("输入的矩阵不合法");
             return null;
         }
+        // 此处多余，其实可以在消元的过程中判断行列式是否一定为0,
+        // 如某一行、或某一列全为0
         if (MatrixUtils.det(A) == 0) {
             System.out.println("行列式为0，无法求逆矩阵");
             return null;
         }
-        // 复制A
+        // 复制A，防止此方法更改原矩阵A的值
         double[][] matrix = new double[A.length][A.length];
         for (int i = 0; i < matrix.length; i++) {
             System.arraycopy(A[i], 0, matrix[i], 0, matrix.length);
@@ -396,7 +398,7 @@ public class MatrixUtils {
                 if (j == index[0]) {
                     continue;
                 }
-                // 依次保存最大元所在列的元素
+                // 依次保存最大元所在列的元素，用于消元
                 double temp = augmentedMatrix[j][index[1]];
                 for (int k = 0; k < col; k++) {
                     augmentedMatrix[j][k] += augmentedMatrix[index[0]][k] * (-temp);
@@ -404,7 +406,7 @@ public class MatrixUtils {
                 augmentedMatrix[j][index[1]] = 0;
             }
         }
-        // 找出逆矩阵
+        // 找出逆矩阵，即右边那个矩阵
         double[][] inverse = new double[row][row];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < row; j++) {
@@ -418,11 +420,18 @@ public class MatrixUtils {
         return inverse;
     }
 
+    /**
+     * 寻找剩余矩阵中最大元的下标
+     * @param matrix 矩阵
+     * @param used 标记某列是否被寻找过
+     * @return 最大元的下标[i,j]
+     */
     public static int[] findMaxNumIndex(double[][] matrix, boolean[] used) {
         double maxNum = Double.MIN_VALUE;
         int[] index = new int[2];
         for (int j = 0; j < matrix.length; j++) {
             for (int k = 0; k < matrix.length; k++) {
+                // 此列已经寻找过，则跳过
                 if (used[k]) {
                     continue;
                 }

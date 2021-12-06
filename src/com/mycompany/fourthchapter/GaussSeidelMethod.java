@@ -12,11 +12,14 @@ public class GaussSeidelMethod {
 
     public static void main(String[] args) {
         double[][] A = new double[][]{
-                {8, -3, 2},
-                {4, 11, -1},
-                {6, 3, 12}
+                {4, -1, 0, -1, 0, 0},
+                {-1, 4, -1, 0, -1, 0},
+                {0, -1, 4, 0, 0, -1},
+                {-1, 0, 0, 4, -1, 0},
+                {0, -1, 0, -1, 4, -1},
+                {0, 0, -1, 0, -1, 4}
         };
-        double[] b = new double[]{20, 33, 36};
+        double[] b = new double[]{0, 5, 0, 6, -2, 6};
         int n = 2;
         int maxTime = 10000;
         double esp = 0.00001;
@@ -66,6 +69,7 @@ public class GaussSeidelMethod {
                 double sum2 = getSum2(j, len, A, preX);
                 X[j] = (b[j] - sum1 - sum2) / A[j][j];
             }
+            System.out.println("X[" + i + "] = " + Arrays.toString(X));
             if (Math.abs(getNorm(X, n) - getNorm(preX, n)) < esp) {
                 return X;
             }
