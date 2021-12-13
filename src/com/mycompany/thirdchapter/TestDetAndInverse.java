@@ -75,6 +75,17 @@ public class TestDetAndInverse {
         MatrixUtils.show(inverse);
         double[][] res = MatrixUtils.multiply(matrix, inverse);
         MatrixUtils.show(res);
-        System.out.println((-0.39574468085106385*3+8*0.05531914893617023+5*0.14893617021276598));
+        System.out.println((-0.39574468085106385 * 3 + 8 * 0.05531914893617023 + 5 * 0.14893617021276598));
+    }
+
+
+    @Test
+    public void testInverseByJardan2() {
+        double[][] matrix = new double[][]{
+                {1, 0},
+                {0, 1}
+        };
+        double[][] inverse = MatrixUtils.inverseByJardanEliminate(matrix);
+        MatrixUtils.show(inverse);
     }
 }

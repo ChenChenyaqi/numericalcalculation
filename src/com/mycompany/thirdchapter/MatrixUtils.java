@@ -347,12 +347,12 @@ public class MatrixUtils {
             System.out.println("输入的矩阵不合法");
             return null;
         }
-        // 此处多余，其实可以在消元的过程中判断行列式是否一定为0,
+       /* // 此处多余，其实可以在消元的过程中判断行列式是否一定为0,
         // 如某一行、或某一列全为0
         if (MatrixUtils.det(A) == 0) {
             System.out.println("行列式为0，无法求逆矩阵");
             return null;
-        }
+        }*/
         // 复制A，防止此方法更改原矩阵A的值
         double[][] matrix = new double[A.length][A.length];
         for (int i = 0; i < matrix.length; i++) {
@@ -379,12 +379,18 @@ public class MatrixUtils {
         // 开始消元
         // 寻找矩阵中绝对值最大(下称最大元)的那个，然后把它变成 1，用它来消其他行
         // 注意：在找到某一个最大元素后，下次寻找最大元时，应避开这一列，而在其他列里找
-        // used[i]:是否已经在第i列寻找过最大元
-        boolean[] used = new boolean[row];
+        // usedCol[i]:是否已经在第i列寻找过最大元
+        boolean[] usedCol = new boolean[row];
+        // usedRow[i]:是否已经在第i行寻找过最大元
+        boolean[] usedRow = new boolean[row];
         // 寻找 n 次
         for (int i = 0; i < row; i++) {
             // 最大元的下标[i,j]
-            int[] index = findMaxNumIndex(augmentedMatrix, used);
+            int[] index = findMaxNumIndex(augmentedMatrix, usedCol, usedRow);
+            if (index[0] == -1 || index[1] == -1) {
+                System.out.println("无法求得逆矩阵！");
+                return null;
+            }
             // 对最大元所在的这一行进行消
             double maxNum = augmentedMatrix[index[0]][index[1]];
             for (int j = 0; j < col; j++) {
@@ -410,7 +416,7 @@ public class MatrixUtils {
         double[][] inverse = new double[row][row];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < row; j++) {
-                if (augmentedMatrix[i][j] == 1){
+                if (augmentedMatrix[i][j] == 1) {
                     for (int k = row; k < col; k++) {
                         inverse[j][k - row] = augmentedMatrix[i][k];
                     }
@@ -422,17 +428,19 @@ public class MatrixUtils {
 
     /**
      * 寻找剩余矩阵中最大元的下标
+     *
      * @param matrix 矩阵
-     * @param used 标记某列是否被寻找过
-     * @return 最大元的下标[i,j]
+     * @param usedCol   标记某列是否被寻找过
+     * @param usedRow   标记某行是否被寻找过
+     * @return 最大元的下标[i, j]
      */
-    public static int[] findMaxNumIndex(double[][] matrix, boolean[] used) {
+    public static int[] findMaxNumIndex(double[][] matrix, boolean[] usedCol, boolean[] usedRow) {
         double maxNum = Double.MIN_VALUE;
-        int[] index = new int[2];
+        int[] index = {-1, -1};
         for (int j = 0; j < matrix.length; j++) {
             for (int k = 0; k < matrix.length; k++) {
                 // 此列已经寻找过，则跳过
-                if (used[k]) {
+                if (usedCol[k] || usedRow[j]) {
                     continue;
                 }
                 if (Math.abs(matrix[j][k]) > maxNum) {
@@ -442,14 +450,18 @@ public class MatrixUtils {
                 }
             }
         }
-        // 标记这一列已经寻找过
-        used[index[1]] = true;
+        // 标记这一列、行已经寻找过
+        if (index[0] != -1 && index[1] != -1){
+            usedCol[index[1]] = true;
+            usedRow[index[0]] = true;
+        }
         return index;
     }
 
 
     /**
      * 返回两个矩阵相乘的结果，AB
+     *
      * @param A 矩阵A
      * @param B 矩阵B
      * @return AB
@@ -458,7 +470,7 @@ public class MatrixUtils {
         if (A == null || B == null) {
             return null;
         }
-        if (A[0].length != B.length){
+        if (A[0].length != B.length) {
             throw new Exception("A,B矩阵无法相乘");
         }
         int row = A.length;
@@ -467,7 +479,7 @@ public class MatrixUtils {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 for (int k = 0; k < A[0].length; k++) {
-                    res[i][j] += A[i][k]*B[k][j];
+                    res[i][j] += A[i][k] * B[k][j];
                 }
             }
         }
