@@ -151,11 +151,12 @@ public class EliminationMethod {
         // 寻找系数矩阵中绝对值最大(下称最大元)的那个，然后把它变成 1，用它来消其他行
         // 注意：在找到某一个最大元素后，下次寻找最大元时，应避开这一列，而在其他列里找
         // used[i]:是否已经在第i列寻找过最大元
-        boolean[] used = new boolean[n];
+        boolean[] usedCol = new boolean[n];
+        boolean[] usedRow = new boolean[n];
         // 寻找 n 次
         for (int i = 0; i < n; i++) {
             // 最大元的下标[i,j]
-            int[] index = MatrixUtils.findMaxNumIndex(augmentedMatrix, used);
+            int[] index = MatrixUtils.findMaxNumIndex(augmentedMatrix, usedCol, usedRow);
             // 对最大元所在的这一行进行消
             double maxNum = augmentedMatrix[index[0]][index[1]];
             for (int j = 0; j < n + 1; j++) {
@@ -190,8 +191,5 @@ public class EliminationMethod {
         }
         return roots;
     }
-
-
-
 
 }
